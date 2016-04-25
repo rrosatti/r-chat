@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">RChat</string>
+
+    <!--  Button  -->
+    <string name="send">Send</string>
+    <string name="login">Login</string>
+
+    <!--  TextView  -->
+    <string name="username">Username</string>
+    <string name="message">Message</string>
+
+    <!--  Hint  -->
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+
+    <!--  Dialog  -->
+    <string name="login_message">Enter your email and password</string>
+    <string name="login_title">Log in</string>
+
 </resources>

@@ -24,6 +24,7 @@ public class MainActivity extends ListActivity {
     EditText messageEditText;
     Button sendMessageButton;
     Button loginButton;
+    Button logoutButton;
     private String username;
 
     @Override
@@ -32,11 +33,12 @@ public class MainActivity extends ListActivity {
         setContentView(R.layout.activity_main);
         Firebase.setAndroidContext(this);
 
-        mRef = new Firebase("https://r-chat.firebaseio.com/");
+        mRef = new Firebase("https://r-chat.firebaseio.com/messages");
 
         messageEditText = (EditText) findViewById(R.id.messageEditText);
         sendMessageButton = (Button) findViewById(R.id.sendMessageButton);
         loginButton = (Button) findViewById(R.id.loginButton);
+        logoutButton = (Button) findViewById(R.id.logoutButton);
 
         sendMessageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,6 +91,15 @@ public class MainActivity extends ListActivity {
 
         });
 
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mRef.unauth();
+                findViewById(R.id.loginButton).setVisibility(View.VISIBLE);
+                findViewById(R.id.logoutButton).setVisibility(View.INVISIBLE);
+            }
+        });
+
         FirebaseListAdapter mListAdapter = new FirebaseListAdapter<ChatMessage>(mRef, ChatMessage.class, R.layout.message_layout, this) {
 
             @Override
@@ -106,6 +117,7 @@ public class MainActivity extends ListActivity {
                 if(authData != null) {
                     username = ((String)authData.getProviderData().get("email"));
                     findViewById(R.id.loginButton).setVisibility(View.INVISIBLE);
+                    findViewById(R.id.logoutButton).setVisibility(View.VISIBLE);
                 } else {
                     username = null;
                     findViewById(R.id.loginButton).setVisibility(View.VISIBLE);

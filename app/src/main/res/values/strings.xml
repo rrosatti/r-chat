@@ -9,6 +9,7 @@
     <!--  TextView  -->
     <string name="username">Username</string>
     <string name="message">Message</string>
+    <string name="rchat">RCHAT</string>
 
     <!--  Hint  -->
     <string name="email">Email</string>

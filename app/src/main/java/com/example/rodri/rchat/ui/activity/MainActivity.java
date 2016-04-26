@@ -10,9 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.rodri.rchat.classes.ChatMessage;
+import com.example.rodri.rchat.classes.Message;
 import com.example.rodri.rchat.R;
-import com.example.rodri.rchat.classes.User;
 import com.example.rodri.rchat.ui.adapter.FirebaseListAdapter;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
@@ -22,10 +21,10 @@ public class MainActivity extends ListActivity {
 
     private Firebase messagesFirebaseRef;
     private Firebase userFirebaseRef;
-    EditText messageEditText;
-    Button sendMessageButton;
-    Button loginButton;
-    Button logoutButton;
+    EditText etMessage;
+    Button btSendMessage;
+    Button btLogin;
+    Button btLogout;
     private String username;
 
     @Override
@@ -36,22 +35,19 @@ public class MainActivity extends ListActivity {
         initialize();
 
 
-        sendMessageButton.setOnClickListener(new View.OnClickListener() {
+        btSendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (username != null) {
-                    String message = messageEditText.getText().toString();
-                    messagesFirebaseRef.push().setValue(new ChatMessage(username, message));
-                    messageEditText.setText("");
+                    String message = etMessage.getText().toString();
+                    messagesFirebaseRef.push().setValue(new Message(username, message));
+                    etMessage.setText("");
                 }
 
             }
         });
 
-        userFirebaseRef.push().setValue(new User("Rodrigo", "r.rosatti@rchat.com"));
-        userFirebaseRef.push().setValue(new User("Lipe", "l.zanelatto@rchat.com"));
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        btLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -91,7 +87,7 @@ public class MainActivity extends ListActivity {
 
         });
 
-        logoutButton.setOnClickListener(new View.OnClickListener() {
+        btLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 messagesFirebaseRef.unauth();
@@ -100,10 +96,10 @@ public class MainActivity extends ListActivity {
             }
         });
 
-        FirebaseListAdapter messagesListAdapter = new FirebaseListAdapter<ChatMessage>(messagesFirebaseRef, ChatMessage.class, R.layout.message_layout, this) {
+        FirebaseListAdapter messagesListAdapter = new FirebaseListAdapter<Message>(messagesFirebaseRef, Message.class, R.layout.message_layout, this) {
 
             @Override
-            protected void populateView(View v, ChatMessage model) {
+            protected void populateView(View v, Message model) {
                 ((TextView)v.findViewById(R.id.authorTextView)).setText(model.getName());
                 ((TextView)v.findViewById(R.id.messageTextView)).setText(model.getMessage());
             }
@@ -132,9 +128,9 @@ public class MainActivity extends ListActivity {
         messagesFirebaseRef = new Firebase("https://r-chat.firebaseio.com/messages");
         userFirebaseRef = new Firebase("https://r-chat.firebaseio.com/users");
 
-        messageEditText = (EditText) findViewById(R.id.messageEditText);
-        sendMessageButton = (Button) findViewById(R.id.sendMessageButton);
-        loginButton = (Button) findViewById(R.id.loginButton);
-        logoutButton = (Button) findViewById(R.id.logoutButton);
+        etMessage = (EditText) findViewById(R.id.messageEditText);
+        btSendMessage = (Button) findViewById(R.id.sendMessageButton);
+        btLogin = (Button) findViewById(R.id.loginButton);
+        btLogout = (Button) findViewById(R.id.logoutButton);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.rodri.rchat;
+package com.example.rodri.rchat.classes;
 
 /**
  * Created by rodri on 4/25/2016.

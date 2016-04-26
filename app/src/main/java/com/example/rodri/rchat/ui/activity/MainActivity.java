@@ -1,9 +1,8 @@
-package com.example.rodri.rchat;
+package com.example.rodri.rchat.ui.activity;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,16 +10,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.rodri.rchat.classes.ChatMessage;
+import com.example.rodri.rchat.R;
+import com.example.rodri.rchat.classes.User;
+import com.example.rodri.rchat.ui.adapter.FirebaseListAdapter;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class MainActivity extends ListActivity {
 
-    private Firebase mRef;
+    private Firebase messagesFirebaseRef;
+    private Firebase userFirebaseRef;
     EditText messageEditText;
     Button sendMessageButton;
     Button loginButton;
@@ -32,24 +33,23 @@ public class MainActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Firebase.setAndroidContext(this);
+        initialize();
 
-        mRef = new Firebase("https://r-chat.firebaseio.com/messages");
-
-        messageEditText = (EditText) findViewById(R.id.messageEditText);
-        sendMessageButton = (Button) findViewById(R.id.sendMessageButton);
-        loginButton = (Button) findViewById(R.id.loginButton);
-        logoutButton = (Button) findViewById(R.id.logoutButton);
 
         sendMessageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                String message = messageEditText.getText().toString();
-                mRef.push().setValue(new ChatMessage(username, message));
-                messageEditText.setText("");
+                if (username != null) {
+                    String message = messageEditText.getText().toString();
+                    messagesFirebaseRef.push().setValue(new ChatMessage(username, message));
+                    messageEditText.setText("");
+                }
 
             }
         });
+
+        userFirebaseRef.push().setValue(new User("Rodrigo", "r.rosatti@rchat.com"));
+        userFirebaseRef.push().setValue(new User("Lipe", "l.zanelatto@rchat.com"));
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,15 +69,15 @@ public class MainActivity extends ListActivity {
                         final String email = ((TextView) alertDialog.findViewById(R.id.emailEditText)).getText().toString();
                         final String password = ((TextView) alertDialog.findViewById(R.id.passwordEditText)).getText().toString();
 
-                        mRef.createUser(email, password, new Firebase.ResultHandler() {
+                        messagesFirebaseRef.createUser(email, password, new Firebase.ResultHandler() {
                             @Override
                             public void onSuccess() {
-                                mRef.authWithPassword(email, password, null);
+                                messagesFirebaseRef.authWithPassword(email, password, null);
                             }
 
                             @Override
                             public void onError(FirebaseError firebaseError) {
-                                mRef.authWithPassword(email, password, null);
+                                messagesFirebaseRef.authWithPassword(email, password, null);
                             }
                         });
                     }
@@ -94,13 +94,13 @@ public class MainActivity extends ListActivity {
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mRef.unauth();
+                messagesFirebaseRef.unauth();
                 findViewById(R.id.loginButton).setVisibility(View.VISIBLE);
                 findViewById(R.id.logoutButton).setVisibility(View.INVISIBLE);
             }
         });
 
-        FirebaseListAdapter mListAdapter = new FirebaseListAdapter<ChatMessage>(mRef, ChatMessage.class, R.layout.message_layout, this) {
+        FirebaseListAdapter messagesListAdapter = new FirebaseListAdapter<ChatMessage>(messagesFirebaseRef, ChatMessage.class, R.layout.message_layout, this) {
 
             @Override
             protected void populateView(View v, ChatMessage model) {
@@ -109,13 +109,13 @@ public class MainActivity extends ListActivity {
             }
 
         };
-        setListAdapter(mListAdapter);
+        setListAdapter(messagesListAdapter);
 
-        mRef.addAuthStateListener(new Firebase.AuthStateListener() {
+        messagesFirebaseRef.addAuthStateListener(new Firebase.AuthStateListener() {
             @Override
             public void onAuthStateChanged(AuthData authData) {
-                if(authData != null) {
-                    username = ((String)authData.getProviderData().get("email"));
+                if (authData != null) {
+                    username = ((String) authData.getProviderData().get("email"));
                     findViewById(R.id.loginButton).setVisibility(View.INVISIBLE);
                     findViewById(R.id.logoutButton).setVisibility(View.VISIBLE);
                 } else {
@@ -126,5 +126,15 @@ public class MainActivity extends ListActivity {
         });
 
 
+    }
+
+    public void initialize() {
+        messagesFirebaseRef = new Firebase("https://r-chat.firebaseio.com/messages");
+        userFirebaseRef = new Firebase("https://r-chat.firebaseio.com/users");
+
+        messageEditText = (EditText) findViewById(R.id.messageEditText);
+        sendMessageButton = (Button) findViewById(R.id.sendMessageButton);
+        loginButton = (Button) findViewById(R.id.loginButton);
+        logoutButton = (Button) findViewById(R.id.logoutButton);
     }
 }

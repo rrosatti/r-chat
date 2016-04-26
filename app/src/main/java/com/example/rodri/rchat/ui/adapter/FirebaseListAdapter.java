@@ -1,4 +1,4 @@
-package com.example.rodri.rchat;
+package com.example.rodri.rchat.ui.adapter;
 
 /**
  * Created by rodri on 4/25/2016.

@@ -5,23 +5,23 @@ package com.example.rodri.rchat.classes;
  */
 public class Message {
 
-    private String user_from;
-    private String user_to;
+    private String userFrom;
+    private String userTo;
     private String message;
 
     public Message() {}
 
-    public Message(String user_from, String user_to, String message) {
-        this.user_from = user_from;
-        this.user_to = user_to;
+    public Message(String userFrom, String userTo, String message) {
+        this.userFrom = userFrom;
+        this.userTo = userTo;
         this.message = message;
     }
 
-    public String getUser_from() {
-        return user_from;
+    public String getUserFrom() {
+        return userFrom;
     }
 
-    public String getUser_to() { return user_to; }
+    public String getUserTo() { return userTo; }
 
     public String getMessage() {
         return message;

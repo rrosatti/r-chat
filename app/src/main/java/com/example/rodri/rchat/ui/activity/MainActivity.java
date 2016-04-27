@@ -31,7 +31,6 @@ public class MainActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Firebase.setAndroidContext(this);
         initialize();
 
 
@@ -40,7 +39,7 @@ public class MainActivity extends ListActivity {
             public void onClick(View v) {
                 if (username != null) {
                     String message = etMessage.getText().toString();
-                    messagesFirebaseRef.push().setValue(new Message(username, message));
+                    //messagesFirebaseRef.push().setValue(new Message(username, message));
                     etMessage.setText("");
                 }
 
@@ -100,7 +99,7 @@ public class MainActivity extends ListActivity {
 
             @Override
             protected void populateView(View v, Message model) {
-                ((TextView)v.findViewById(R.id.authorTextView)).setText(model.getName());
+                //((TextView)v.findViewById(R.id.authorTextView)).setText(model.getName());
                 ((TextView)v.findViewById(R.id.messageTextView)).setText(model.getMessage());
             }
 

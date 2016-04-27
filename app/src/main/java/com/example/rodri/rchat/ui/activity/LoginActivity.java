@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.rodri.rchat.R;
+import com.example.rodri.rchat.classes.Friend;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -28,7 +29,6 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
-        Firebase.setAndroidContext(this);
         initialize();
 
         btLogin.setOnClickListener(new View.OnClickListener() {
@@ -45,7 +45,8 @@ public class LoginActivity extends Activity {
 
                     @Override
                     public void onError(FirebaseError firebaseError) {
-                        Toast.makeText(LoginActivity.this, "Try again", Toast.LENGTH_LONG).show();
+                        loginFirebaseRef.authWithPassword(email, pass, null);
+                        //Toast.makeText(LoginActivity.this, "Try again", Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -54,7 +55,7 @@ public class LoginActivity extends Activity {
                     public void onAuthStateChanged(AuthData authData) {
                         if (authData != null) {
                             userEmail = ((String) authData.getProviderData().get("email"));
-                            Intent showFriends = new Intent(LoginActivity.this, MainActivity.class);
+                            Intent showFriends = new Intent(LoginActivity.this, FriendsActivity.class);
                             showFriends.putExtra("USER_EMAIL", userEmail);
                             startActivity(showFriends);
                             finish();

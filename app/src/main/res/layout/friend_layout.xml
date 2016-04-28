@@ -7,7 +7,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtFriendName"
-        android:textSize="16pt"
+        android:textSize="12pt"
         android:textStyle="bold|italic"
         android:layout_marginLeft="10dp"/>
 </LinearLayout>

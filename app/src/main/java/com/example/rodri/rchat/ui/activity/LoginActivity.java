@@ -31,6 +31,26 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.login_activity);
         initialize();
 
+
+        //loginFirebaseRef.unauth();
+
+        loginFirebaseRef.addAuthStateListener(new Firebase.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(AuthData authData) {
+                if (authData != null) {
+                    userEmail = ((String) authData.getProviderData().get("email"));
+                    Intent showFriends = new Intent(LoginActivity.this, FriendsActivity.class);
+                    showFriends.putExtra("USER_EMAIL", userEmail);
+                    startActivity(showFriends);
+                    finish();
+                } else {
+                    userEmail = null;
+                }
+
+            }
+        });
+
+
         btLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,7 +70,7 @@ public class LoginActivity extends Activity {
                     }
                 });
 
-                loginFirebaseRef.addAuthStateListener(new Firebase.AuthStateListener() {
+                /**loginFirebaseRef.addAuthStateListener(new Firebase.AuthStateListener() {
                     @Override
                     public void onAuthStateChanged(AuthData authData) {
                         if (authData != null) {
@@ -64,7 +84,7 @@ public class LoginActivity extends Activity {
                         }
 
                     }
-                });
+                });*/
 
             }
         });
@@ -77,5 +97,6 @@ public class LoginActivity extends Activity {
         btLogin = (Button) findViewById(R.id.btLogin);
 
         loginFirebaseRef = new Firebase("https://r-chat.firebaseio.com/");
+
     }
 }

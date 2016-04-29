@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.example.rodri.rchat.classes.Message;
 import com.example.rodri.rchat.R;
-import com.example.rodri.rchat.ui.adapter.FirebaseListAdapter;
+import com.example.rodri.rchat.ui.adapter.FriendsFirebaseListAdapter;
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -95,12 +95,12 @@ public class MainActivity extends ListActivity {
             }
         });
 
-        FirebaseListAdapter messagesListAdapter = new FirebaseListAdapter<Message>(messagesFirebaseRef, Message.class, R.layout.message_layout, this) {
+        FriendsFirebaseListAdapter messagesListAdapter = new FriendsFirebaseListAdapter<Message>(messagesFirebaseRef, Message.class, R.layout.message_layout, this) {
 
             @Override
             protected void populateView(View v, Message model) {
                 //((TextView)v.findViewById(R.id.authorTextView)).setText(model.getName());
-                ((TextView)v.findViewById(R.id.messageTextView)).setText(model.getMessage());
+                ((TextView)v.findViewById(R.id.txtMessage)).setText(model.getMessage());
             }
 
         };

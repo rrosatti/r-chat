@@ -15,8 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rodri.rchat.R;
-import com.example.rodri.rchat.classes.Friend;
-import com.example.rodri.rchat.classes.User;
 import com.example.rodri.rchat.ui.activity.ChatActivity;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
@@ -37,7 +35,7 @@ import java.util.List;
  *
  * @param <T> The class type to use as a model for the data contained in the children of the given Firebase location
  */
-public abstract class FirebaseListAdapter<T> extends BaseAdapter {
+public abstract class FriendsFirebaseListAdapter<T> extends BaseAdapter {
 
     private Query mRef;
     private Class<T> mModelClass;
@@ -58,7 +56,7 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
      *                    instance of the corresponding view with the data from an instance of mModelClass.
      * @param activity    The activity containing the ListView
      */
-    public FirebaseListAdapter(Query mRef, Class<T> mModelClass, int mLayout, Activity activity) {
+    public FriendsFirebaseListAdapter(Query mRef, Class<T> mModelClass, int mLayout, Activity activity) {
         this.mRef = mRef;
         this.mModelClass = mModelClass;
         this.mLayout = mLayout;
@@ -74,7 +72,7 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
 
-                T model = dataSnapshot.getValue(FirebaseListAdapter.this.mModelClass);
+                T model = dataSnapshot.getValue(FriendsFirebaseListAdapter.this.mModelClass);
                 String key = dataSnapshot.getKey();
 
                 // Insert into the correct location, based on previousChildName
@@ -100,7 +98,7 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 // One of the mModels changed. Replace it in our list and name mapping
                 String key = dataSnapshot.getKey();
-                T newModel = dataSnapshot.getValue(FirebaseListAdapter.this.mModelClass);
+                T newModel = dataSnapshot.getValue(FriendsFirebaseListAdapter.this.mModelClass);
                 int index = mKeys.indexOf(key);
 
                 mModels.set(index, newModel);
@@ -126,7 +124,7 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
 
                 // A model changed position in the list. Update our list accordingly
                 String key = dataSnapshot.getKey();
-                T newModel = dataSnapshot.getValue(FirebaseListAdapter.this.mModelClass);
+                T newModel = dataSnapshot.getValue(FriendsFirebaseListAdapter.this.mModelClass);
                 int index = mKeys.indexOf(key);
                 mModels.remove(index);
                 mKeys.remove(index);
@@ -149,7 +147,7 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-                Log.e("FirebaseListAdapter", "Listen was cancelled, no more updates will occur");
+                Log.e("FriendsFirebaseAdapter", "Listen was cancelled, no more updates will occur");
             }
 
         });
@@ -179,7 +177,7 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
 
     /** Add by Rodrigo 28/04/2016 */
     public class ViewHolder {
-        public TextView displayMessage;
+        public TextView displayFriendEmail;
     }
 
     @Override
@@ -196,12 +194,12 @@ public abstract class FirebaseListAdapter<T> extends BaseAdapter {
         populateView(view, model);
 
         /** Add by Rodrigo 28/04/2016 */
-        holder.displayMessage = (TextView) (view.findViewById(R.id.txtFriendName));
-        final String friendEmail = holder.displayMessage.getText().toString();
+        holder.displayFriendEmail = (TextView) (view.findViewById(R.id.txtFriendName));
+        final String friendEmail = holder.displayFriendEmail.getText().toString();
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(activity, "Model: " + friendEmail, Toast.LENGTH_LONG).show();
+                //Toast.makeText(activity, "Model: " + friendEmail, Toast.LENGTH_LONG).show();
                 Intent showChat = new Intent(activity, ChatActivity.class);
                 showChat.putExtra("FRIEND_EMAIL", friendEmail);
                 activity.startActivity(showChat);

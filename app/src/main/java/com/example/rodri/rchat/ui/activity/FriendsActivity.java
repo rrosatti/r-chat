@@ -1,25 +1,20 @@
 package com.example.rodri.rchat.ui.activity;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rodri.rchat.R;
 import com.example.rodri.rchat.classes.Friend;
-import com.example.rodri.rchat.classes.User;
-import com.example.rodri.rchat.ui.adapter.FirebaseListAdapter;
+import com.example.rodri.rchat.ui.adapter.FriendsFirebaseListAdapter;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
-
-import java.util.ArrayList;
 
 /**
  * Created by rodri on 4/27/2016.
@@ -29,7 +24,7 @@ public class FriendsActivity extends ListActivity {
     private Firebase friendsFirebaseRef;
     private Firebase usersFirebase;
     private Firebase ref;
-    private FirebaseListAdapter<Friend> firebaseListAdapter;
+    private FriendsFirebaseListAdapter<Friend> firebaseListAdapter;
     private String userEmail;
     String userName;
 
@@ -46,7 +41,7 @@ public class FriendsActivity extends ListActivity {
         System.out.println("test: " + test);**/
 
 
-        firebaseListAdapter = new FirebaseListAdapter<Friend>(friendsQuery, Friend.class, R.layout.friend_layout, FriendsActivity.this) {
+        firebaseListAdapter = new FriendsFirebaseListAdapter<Friend>(friendsQuery, Friend.class, R.layout.friend_layout, FriendsActivity.this) {
             @Override
             protected void populateView(View v, Friend model) {
                 //userName = getUserNameFromFirebase(model.getFriendName());
